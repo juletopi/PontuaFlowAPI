@@ -1,0 +1,9 @@
+@PontuaFlow_HostAddress = http://localhost:5003
+
+GET {{PontuaFlow_HostAddress}}/
+Accept: application/json
+
+###
+
+GET {{PontuaFlow_HostAddress}}/despesas
+Accept: application/json

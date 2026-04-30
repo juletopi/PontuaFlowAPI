@@ -1,0 +1,189 @@
+OBJETIVO DO SISTEMA (PontuaFlow API)
+Implementar uma API simples (sem autenticação) para:
+- Projetos
+- Weeks (semanas) do projeto (criadas manualmente; numero_semana inserido manualmente)
+- Devs dentro de um projeto
+- Tasks dentro de um projeto, atribuídas a um Dev e a uma Week
+- Listagem de métricas por Dev no projeto:
+  - total de pontos
+  - aproveitamento (%)
+- Ranking dos devs do projeto por total de pontos
+
+REGRAS DE ESCOPO (NÃO IMPLEMENTAR)
+- Não implementar autenticação/authorization.
+- Não implementar filtros na listagem de tasks/devs e relatórios de exportação de PDF/Execel.
+- Não implementar usuários do sistema.
+
+CONFIGURAÇÃO DO PROJETO (VISUAL STUDIO)
+1) Criado projeto:
+   - Template: “ASP.NET Core Web API”
+   - Framework: .NET 8.0 (LTS)
+2) Swagger:
+   - Swagger habilitado (padrão do .NET 8).
+3) Banco de dados:
+   - Usar Entity Framework Core.
+   - Banco: PostgreSQL via NuGet
+   - Usar migrations.
+4) Estrutura de pastas (OBRIGATÓRIA):
+   - /Controllers: endpoints e lógica de entrada
+   - /Models: entidades EF (tabelas)
+   - /Data: DbContext e configuração EF
+
+MODELO DE DADOS (OBRIGATÓRIO)
+Entidades mínimas:
+
+1) Project
+- Id (int)
+- Nome (string, obrigatório)
+- Descricao (string?, opcional)
+- Foto (string?, opcional)  // url/path
+- CreatedAt (DateTime)
+- DeletedAt (DateTime)
+
+2) Week (criada manualmente pelo usuário)
+- Id (int)
+- ProjectId (int, FK)
+- NumeroSemana (int, obrigatório; inserido manualmente)
+- DataInicio (DateOnly?, opcional)
+- DataFim (DateOnly?, opcional)
+- CreatedAt (DateTime)
+- DeletedAt (DateTime)
+REGRAS:
+- Deve existir restrição única: (ProjectId, NumeroSemana)
+
+3) Dev
+- Id (int)
+- ProjectId (int, FK)
+- Nome (string, obrigatório)
+- Cargo (string, obrigatório)
+- Email (string?, opcional)
+- DataInicio (DateOnly?, opcional)
+- Avatar (string?, opcional)
+- CreatedAt (DateTime)
+- DeletedAt (DateTime)
+
+4) Task (tarefa)
+- Id (int)
+- ProjectId (int, FK)
+- DevId (int, FK)
+- WeekId (int, FK)  // obrigatório
+- NomeTarefa (string, obrigatório)
+- Descricao (string?, opcional)
+- Pontuacao (int, obrigatório, 0..8)
+- DataInicio (DateOnly, obrigatório)
+- DataFim (DateOnly?, opcional)
+- CreatedAt (DateTime)
+- DeletedAt (DateTime)
+
+Entidades N:N:
+
+5) DevTeam
+- Id (int)
+- ProjectId (int, FK)
+- Nome (string, obrigatório)
+- CreatedAt (DateTime)
+- DeletedAt (DateTime)
+
+6) DevTeamMember (N:N Dev <-> DevTeam)
+- DevId (int, FK)
+- DevTeamId (int, FK)
+- JoinedAt (DateTime?)
+
+7) TaskTeamAssignment (N:N Task <-> DevTeam)
+- TaskId (int, FK)
+- DevTeamId (int, FK)
+
+REGRAS E CÁLCULOS (OBRIGATÓRIOS)
+1) Pontuação:
+- Validar Pontuacao em Task: 0 <= Pontuacao <= 8.
+- Valores são 0 = Não deu, 2 = Quase, 3 = Saiu algo, 5 = Deu bom, 8 = Extra.
+
+2) Ranking:
+- Ranking de um Project é a lista de Devs do projeto numerados por:
+  - total_pontos DESC
+
+3) Total de pontos (por Dev em um Project):
+- total_pontos = soma(Task.Pontuacao) das tasks do dev no projeto.
+
+4) Aproveitamento (%):
+- min_sucesso = 5
+- qtd_tasks = quantidade de tasks do dev no projeto
+- pontos_obtidos = soma(Task.Pontuacao) do dev no projeto
+- base_sucesso = qtd_tasks * 5
+- se qtd_tasks == 0 => aproveitamento = 0
+- senão => aproveitamento_percent = (pontos_obtidos / base_sucesso) * 100
+- pode ser > 100% (extras)
+
+REQUISITOS DE ENDPOINTS (MÍNIMO VIÁVEL)
+Implementar Controllers REST básicos:
+
+A) ProjectsController
+- GET /api/projects
+- GET /api/projects/{id}
+- POST /api/projects
+- PUT /api/projects/{id}
+- DELETE /api/projects/{id}
+
+B) WeeksController (sempre no contexto do projeto)
+- GET /api/projects/{projectId}/weeks
+- POST /api/projects/{projectId}/weeks
+- PUT /api/projects/{projectId}/weeks/{weekId}
+- DELETE /api/projects/{projectId}/weeks/{weekId}
+
+C) DevsController (sempre no contexto do projeto)
+- GET /api/projects/{projectId}/devs
+- POST /api/projects/{projectId}/devs
+- PUT /api/projects/{projectId}/devs/{devId}
+- DELETE /api/projects/{projectId}/devs/{devId}
+
+D) TasksController (sempre no contexto do projeto)
+- GET /api/projects/{projectId}/tasks
+- POST /api/projects/{projectId}/tasks
+- PUT /api/projects/{projectId}/tasks/{taskId}
+- DELETE /api/projects/{projectId}/tasks/{taskId}
+
+E) MetricsController (leitura)
+- GET /api/projects/{projectId}/metrics/devs
+  Retorna: para cada dev do projeto:
+    - devId, nome, cargo
+    - totalPontos
+    - aproveitamentoPercent
+- GET /api/projects/{projectId}/ranking
+  Retorna: lista ordenada por totalPontos DESC (pode reutilizar o endpoint de metrics com ordenação)
+
+F) DevTeamsController
+- GET /api/projects/{projectId}/teams
+- POST /api/projects/{projectId}/teams
+- PUT /api/projects/{projectId}/teams/{teamId}
+- DELETE /api/projects/{projectId}/teams/{teamId}
+- POST/DELETE para membros e assignments
+
+PADRÕES DE IMPLEMENTAÇÃO (OBRIGATÓRIO)
+- Usar EF Core com DbContext em /Data/AppDbContext.cs
+- Entidades em /Models/*.cs com navegações e FKs.
+- Controllers em /Controllers com [ApiController] e rotas claras.
+- Usar DTOs para entrada/saída (recomendado) para evitar overposting.
+- Validar:
+  - existência do Project em rotas /projects/{projectId}/...
+  - consistência: Dev.ProjectId e Week.ProjectId devem bater com Task.ProjectId na criação/edição
+  - Pontuacao (0..8)
+  - NumeroSemana único por Project
+- Respostas HTTP:
+  - 200/201 para sucesso
+  - 400 para validação
+  - 404 para recursos não encontrados
+- Swagger deve listar todos os endpoints.
+
+ENTREGÁVEIS AO FINAL
+1) Projeto .NET 8 Web API com a estrutura /Controllers, /Models, /Data.
+2) Migrations EF Core e banco funcionando.
+3) Endpoints mínimos implementados e testáveis via Swagger.
+4) Cálculo de métricas e ranking funcionando.
+
+CHECKLIST FINAL
+- [ ] Compila no Visual Studio com .NET 8
+- [ ] Swagger abre e testa CRUD
+- [ ] Constraints: Pontuacao 0..8 e (ProjectId, NumeroSemana) único
+- [ ] Ranking por total de pontos
+- [ ] Aproveitamento com limiar 5 e >100% permitido
+- [ ] Sem autenticação implementada
