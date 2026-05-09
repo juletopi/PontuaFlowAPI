@@ -24,7 +24,8 @@
 
 <div align="center">
    <a href="#sobre-o-projeto">Sobre</a> &#xa0; • &#xa0;
-   <a href="#instalação">Instalação</a>
+   <a href="#instalação">Instalação</a> &#xa0; • &#xa0;
+   <a href="#autor">Autor</a> &#xa0; • &#xa0;
 </div>
 
 ---
