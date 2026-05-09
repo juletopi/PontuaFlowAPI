@@ -7,10 +7,10 @@
 
 <div align="center">
    <a href="https://learn.microsoft.com/pt-br/dotnet/csharp/">
-      <img src="https://img.shields.io/badge/C%23_12-239120?style=for-the-badge&logo=c-sharp&logoColor=white" alt="CSharp-badge" style="max-width: 100%;">
+      <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white" alt="CSharp-badge" style="max-width: 100%;">
    </a>
    <a href="https://dotnet.microsoft.com/pt-br/download/dotnet/8.0">
-      <img src="https://img.shields.io/badge/.NET_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="DotNet-badge" style="max-width: 100%;">
+      <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="DotNet-badge" style="max-width: 100%;">
    </a>
    <a href="https://www.postgresql.org/">
       <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL-badge" style="max-width: 100%;">
@@ -24,8 +24,7 @@
 
 <div align="center">
    <a href="#sobre-o-projeto">Sobre</a> &#xa0; • &#xa0;
-   <a href="#estrutura-do-projeto">Estrutura</a> &#xa0; • &#xa0;
-   <a href="#instalação">Instalação</a> &#xa0;
+   <a href="#instalação">Instalação</a>
 </div>
 
 ---
@@ -36,8 +35,8 @@ O **PontuaFlow API** é uma aplicação backend construída em .NET 8 que suport
 
 ### Funcionalidades
 
-- **Módulo de Projetos e Semanas**: Controle hierárquico onde `Weeks` (semanas) possuem numeração única garantida por projeto.
-- **Módulo de Desenvolvedores (`Devs`) e Equipes (`DevTeams`)**: Cadastro unificado e associação direta com os projetos.
+- **Projetos e Semanas**: Controle hierárquico onde `Weeks` (semanas) possuem numeração única garantida por projeto.
+- **Desenvolvedores (`Devs`) e Equipes (`DevTeams`)**: Cadastro unificado e associação direta com os projetos.
 - **Ciclo e Avaliação de Tarefas (`Tasks`)**: Atribuição de tarefas ao dev e vinculação à semana específica do projeto.
 - **Regras de Pontuação (Gamificação)**: Validação fixa de pontos baseada no resultado da tarefa:
    - 🔴 `0` : *Zerou / Não deu*
@@ -64,24 +63,6 @@ O **PontuaFlow API** é uma aplicação backend construída em .NET 8 que suport
 <a href="https://www.postgresql.org/">
    <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL-badge">
 </a>
-
-<div align="left">
-   <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
-</div>
-
-## Estrutura do projeto
-
-```text
-PontuaFlowAPI/
-├── Controllers/               # Endpoints REST expostos
-├── Data/                      # Entity Framework e AppDbContext
-├── Migrations/                # Controle de versionamento do BD gerados pelo EF Core
-├── Models/                    # Entidades (Project, Dev, Task, Week, DevTeam)
-├── appsettings.json
-├── Program.cs                 # Registro de dependências, setup da API e documentação Swagger
-├── PontuaFlow.csproj
-└── README.md
-```
 
 <div align="left">
    <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
@@ -142,4 +123,74 @@ dotnet run
 
 <div align="left">
    <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
+</div>
+
+## Autor
+
+<table>
+  <tr>
+    <td valign="middle" width="25%">
+      <div align="center">  
+        <a href="https://github.com/juletopi" title="Perfil no GitHub" aria-label="GitHub - Juletopi">
+          <img src="https://avatars.githubusercontent.com/u/76459155?s=400&u=4b9bd87cae92eea4fc154c28eafe226ed034a1d8&v=4" width="150" alt="Profile Pic - Juletopi"/>
+          <br>
+          <sub><strong>Júlio Cézar | Juletopi</strong></sub>
+          <br>
+        </a>
+      </div>
+    </td>
+    <td valign="middle" width="75%">
+      <ul style="list-style: none; padding-left: 0; margin: 0;">
+        <li>
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="15" alt="LinkedIn" style="vertical-align:middle;">
+          LinkedIn — 
+          <a href="https://www.linkedin.com/in/julio-cezar-pereira-camargo/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn - Júlio Cézar P. Camargo">
+            Júlio Cézar P. Camargo
+          </a>
+        </li>
+        <li>
+          <img src="https://pngimg.com/uploads/email/email_PNG100738.png" width="15" alt="Email" style="vertical-align:middle;">
+          Email — 
+          <a href="mailto:juliocezarpvh@hotmail.com" aria-label="Send email - juliocezarpvh@hotmail.com">
+            juliocezarpvh@hotmail.com
+          </a>
+        </li>
+        <li>
+          <img src="https://cdn3.emoji.gg/emojis/2116-facebook.png" width="15" alt="Facebook" style="vertical-align:middle;">
+          Facebook — 
+          <a href="https://www.facebook.com/juhletopi" target="_blank" rel="noopener noreferrer" aria-label="Facebook - Juhletopi">
+            facebook.com/juhletopi
+          </a>
+        </li>
+        <li>
+          <img src="https://cdn3.emoji.gg/emojis/6333-instagram.png" width="15" alt="Instagram" style="vertical-align:middle;">
+          Instagram — 
+          <a href="https://www.instagram.com/juletopi/" target="_blank" rel="noopener noreferrer" aria-label="Instagram - Juletopi">
+            @juletopi
+          </a>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="https://github.com/user-attachments/assets/a3e6ca25-6035-4a7a-94b9-f35cb9d24a96" width="18" alt="Portfolio" align="center"/>
+      Portfolio —
+      <a href="https://juletopi.github.io/JCPC_Portfolio/" target="_blank" rel="noopener noreferrer" aria-label="Portfolio - Juletopi">
+        juletopi.github.io/JCPC_Portfolio
+      </a>
+    </td>
+  </tr>
+</table>
+
+<div align="left">
+  <h6><a href="#pontuadev"> Voltar para o início ↺</a></h6>
+</div>
+
+<br>
+
+----
+
+<div align="center">
+  Feito com ❤️ e ☕ por <a href="https://github.com/juletopi"> Juletopi</a>.
 </div>
