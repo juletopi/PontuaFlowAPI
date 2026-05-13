@@ -25,6 +25,7 @@
 <div align="center">
    <a href="#sobre-o-projeto">Sobre</a> &#xa0; • &#xa0;
    <a href="#instalação">Instalação</a> &#xa0; • &#xa0;
+   <a href="#guia-de-integração">Integração</a> &#xa0; • &#xa0;
    <a href="#autor">Autor</a> &#xa0;
 </div>
 
@@ -121,6 +122,68 @@ dotnet run
 > [!NOTE]
 > O Swagger irá gerar automaticamente a documentação UI dos endpoints da API. 
 > Ele estará acessível através da rota `http://localhost:<PORTA_LOCAL>/swagger/index.html`.
+
+<div align="left">
+   <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
+</div>
+
+## Guia de Integração
+
+Para consumir a **PontuaFlow API** no seu projeto Web (React, Vue, Angular, etc.), siga estes passos práticos:
+
+### 1. Configurar a Base URL
+Crie uma variável de ambiente no seu frontend apontando para a API (ex: no `.env`):
+```text
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+Configure o cliente HTTP (ex: Axios) para utilizar essa URL e facilitar as requisições:
+```javascript
+import axios from 'axios';
+
+export const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
+  headers: { 'Content-Type': 'application/json' }
+});
+```
+
+### 2. Fluxo Relacional de Integração
+
+A regra de negócio exige a seguinte sequência obrigatória de chamadas para o funcionamento correto:
+
+**A. Criar o Projeto**
+```javascript
+const res = await api.post('/projects', { name: "Meu App", description: "Descrição" });
+const projectId = res.data.id; // Necessário para as etapas seguintes
+```
+
+**B. Registrar Desenvolvedores e Iniciar a Semana**
+Os Devs e Semanas devem pertencer a um projeto existente.
+```javascript
+await api.post('/devs', { name: "Maria", projectId });
+await api.post('/weeks', { numeroSemana: 1, projectId });
+```
+
+**C. Criar Tarefas e Pontuar**
+Vincule a Tarefa ao Projeto, Dev e Semana.
+```javascript
+await api.post('/tasks', {
+    title: "Tela de Login",
+    devId, // ID retornado na criação do Dev
+    weekId, // ID retornado na criação da Semana
+    projectId,
+    pontos: 5 
+});
+```
+
+**D. Exibir Dashboard (Métricas e Ranking)**
+Chame a rota de métricas que já traz o array ordenado de devs pelo aproveitamento matemático.
+```javascript
+const ranking = await api.get(`/metrics/project/${projectId}/ranking`);
+console.log(ranking.data);
+```
+
+> **Dica:** Teste os payloads JSON exatos através da interface Swagger da aplicação localmente, na rota `/swagger`.
 
 <div align="left">
    <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
