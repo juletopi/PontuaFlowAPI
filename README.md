@@ -131,6 +131,11 @@ dotnet run
 
 Para consumir a **PontuaFlow API** no seu projeto Web (React, Vue, Angular, etc.), siga estes passos práticos:
 
+> [!IMPORTANT]
+> A API deve estar em execução (servidor ligado) para conseguir responder às requisições do seu outro projeto. Escolha uma das formas abaixo:
+> - **Via Docker (Recomendado):** Na raiz deste repositório, rode `docker-compose up -d`. Isso levanta o banco e a API automaticamente (geralmente em `http://localhost:8080`).
+> - **Via .NET CLI:** Siga o painel de [Instalação](#instalação) acima e mantenha o terminal rodando com o comando `dotnet run`.
+
 ### 1. Configurar a Base URL
 Crie uma variável de ambiente no seu frontend apontando para a API (ex: no `.env`):
 ```text
@@ -182,8 +187,6 @@ Chame a rota de métricas que já traz o array ordenado de devs pelo aproveitame
 const ranking = await api.get(`/metrics/project/${projectId}/ranking`);
 console.log(ranking.data);
 ```
-
-> **Dica:** Teste os payloads JSON exatos através da interface Swagger da aplicação localmente, na rota `/swagger`.
 
 <div align="left">
    <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
