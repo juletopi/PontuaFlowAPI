@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16
+    container_name: pontuaflow_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: suasenha
+      POSTGRES_DB: PontuaFlowDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pontuaflow_api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=PontuaFlowDB;Username=postgres;Password=suasenha
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
