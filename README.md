@@ -192,6 +192,8 @@ console.log(ranking.data);
    <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
 </div>
 
+<br>
+
 ## Autor
 
 <table>
@@ -251,7 +253,7 @@ console.log(ranking.data);
 </table>
 
 <div align="left">
-  <h6><a href="#pontuadev"> Voltar para o início ↺</a></h6>
+  <h6><a href="#pontuaflow-api"> Voltar para o início ↺</a></h6>
 </div>
 
 <br>
